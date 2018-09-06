@@ -1,0 +1,10 @@
+[package]
+name = "set_gitconfig-rs"
+version = "0.1.0"
+authors = ["Ankur Srivastava <ankur.srivastava@email.de>"]
+
+[[bin]]
+name = "set-git-config"
+path = "src/main.rs"
+
+[dependencies]

@@ -1,0 +1,4 @@
+[[package]]
+name = "set_gitconfig-rs"
+version = "0.1.0"
+
