@@ -1,42 +1,72 @@
+// MIT License
+//
+// Copyright (c) 2019 Ankur Srivastava
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#[macro_use]
+extern crate log;
+
+use env_logger;
+use git2::{Config as GitConfig, Repository};
 use std::env;
-use std::process::Command;
+use std::path::Path;
+mod config;
+mod errors;
+use crate::errors::SetGitConfigError;
 
-fn execute_cmd<T>(cmd: T, args: &[&str])
-where
-    T: Into<String>,
-{
-    Command::new(cmd.into())
-        .args(args)
-        .spawn()
-        .expect("failed to execute process");
+/// Set the correct username and email based on the giturl
+///
+/// The location of default config.toml can be changed by a variable
+/// export SETGITCONFIG_CONF=/my/custom/path/to/config.toml
+/// set-git-config
+///
+fn set_gitconfig() -> Result<(), SetGitConfigError> {
+	// We assume that we are in a valid directory.
+	let path = env::current_dir()?;
+	let absolute_path = path
+		.to_str()
+		.ok_or_else(|| errors::SetGitConfigError::PathError)?
+		.to_lowercase();
+	let repo = Repository::open(&Path::new(&absolute_path))?;
+	let remote = repo.find_remote("origin")?;
+	let url = remote.url().ok_or(git2::Error::from_str("failed"))?;
+	let mut gitconfig = GitConfig::open_default()?;
+
+	let configuration = config::read().expect("Unable to read the config file for setgitconfig");
+	for conf in configuration.repositories {
+		gitconfig.set_str("user.name", &conf.username).unwrap();
+		if url.contains(&conf.giturl) {
+			gitconfig.set_str("user.email", &conf.email).unwrap();
+		}
+	}
+	Ok(())
 }
 
-fn set_gitconfig() {
-    let username = &vec!["config", "user.name", "Ankur Srivastava"];
-    let reco_email = &vec!["config", "user.email", "ankur.srivastava@recogizer.de"];
-    let personal_email = &vec!["config", "user.email", "best.ankur@gmail.com"];
-    let git_cmd = "git";
-
-    // We assume that we are in a valid directory.
-    let path = env::current_dir().expect("This is my current working directory");
-    let absolute_path = path
-        .to_str()
-        .expect("Failed to get current working dir")
-        .to_lowercase();
-
-    if absolute_path.contains("reco") {
-        println!("Recogizer workspace");
-        execute_cmd(git_cmd, &username);
-        execute_cmd(git_cmd, &reco_email);
-    }
-
-    if absolute_path.contains("ankur") {
-        println!("Ankur workspace");
-        execute_cmd(git_cmd, &personal_email);
-        execute_cmd(git_cmd, &username);
-    }
-}
-
-fn main() {
-    set_gitconfig()
+fn main() -> Result<(), SetGitConfigError> {
+	env_logger::init();
+	debug!("starting up");
+	match set_gitconfig() {
+		Ok(_) => Ok(()),
+		Err(error) => {
+			debug!("{}", error);
+			Ok(())
+		}
+	}
 }
