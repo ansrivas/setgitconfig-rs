@@ -16,7 +16,9 @@ This binary solves exactly that, based on a simple toml file.
 ### Configuration:
 
 - Install the binary using
+  - cargo:
   ``` cargo install setgitconfig-rs```
+  - [Releases](https://github.com/ansrivas/setgitconfig-rs/releases)
 - Put this in your `~/.bashrc`
 
   `PROMPT_COMMAND="/usr/local/bin/setgitconfig; $PROMPT_COMMAND"`
