@@ -14,8 +14,8 @@ This binary solves exactly that, based on a simple toml file.
 
 ### Configuration:
 
-- Download the pre-compiled binary from releases
-
+- Install the binary using 
+  ``` cargo install setgitconfig```
 - Put this in your `~/.bashrc`
 
   `PROMPT_COMMAND="/usr/local/bin/setgitconfig; $PROMPT_COMMAND"`
