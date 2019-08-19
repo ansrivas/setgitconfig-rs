@@ -16,12 +16,19 @@ This binary solves exactly that, based on a simple toml file.
 ### Configuration:
 
 - Install the binary using
-  - cargo:
-  ``` cargo install setgitconfig-rs```
-  - [Releases](https://github.com/ansrivas/setgitconfig-rs/releases)
-- Put this in your `~/.bashrc`
-
-  `PROMPT_COMMAND="/usr/local/bin/setgitconfig; $PROMPT_COMMAND"`
+  - cargo: ` cargo install setgitconfig-rs`
+    - Put this in your bashrc
+      ```bash
+      PROMPT_COMMAND="~/.cargo/bin/setgitconfig; $PROMPT_COMMAND"
+      ```
+  - [From Releases](https://github.com/ansrivas/setgitconfig-rs/releases)
+    - Download the binary
+    - Make it executable `chmod +x setgitconfig`
+    - Copy this in your path, for e.g. `sudo mv setgitconfig /usr/local/bin/setgitconfig`
+    - Put this in your `~/.bashrc`
+      ```bash
+      PROMPT_COMMAND="/usr/local/bin/setgitconfig; $PROMPT_COMMAND"
+      ```
 
 - Just create a directory in your user's home
 
