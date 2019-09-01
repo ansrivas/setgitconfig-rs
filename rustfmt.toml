@@ -4,3 +4,6 @@ max_width = 100
 newline_style = "Unix"
 use_try_shorthand = true
 edition = "2018"
+# https://github.com/rust-lang/rustfmt/blob/master/Configurations.md#fn_args_layout
+fn_args_layout = "Vertical"
+# https://github.com/rust-lang/rustfmt/blob/master/Configurations.md#merge_imports

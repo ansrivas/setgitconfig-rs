@@ -51,9 +51,9 @@ fn set_gitconfig() -> Result<(), SetGitConfigError> {
 
 	let configuration = config::read().expect("Unable to read the config file for setgitconfig");
 	for conf in configuration.repositories {
-		gitconfig.set_str("user.name", &conf.username).unwrap();
+		gitconfig.set_str("user.name", &conf.username)?;
 		if url.contains(&conf.giturl) {
-			gitconfig.set_str("user.email", &conf.email).unwrap();
+			gitconfig.set_str("user.email", &conf.email)?;
 		}
 	}
 	Ok(())
