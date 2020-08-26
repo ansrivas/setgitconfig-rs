@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.com/ansrivas/setgitconfig-rs.svg?token=hM6V8mr5fwQPseiFSYVi&branch=master)](https://travis-ci.com/ansrivas/setgitconfig-rs)
+![Build Status](https://github.com/ansrivas/setgitconfig-rs/workflows/Linux/badge.svg)
 [![Tag](https://img.shields.io/github/tag/ansrivas/setgitconfig-rs.svg)](https://github.com/ansrivas/setgitconfig-rs/releases/latest)
 
 ### setgitconfig-rs
