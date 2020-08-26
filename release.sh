@@ -13,7 +13,6 @@ cargo clean
 # rustup target list
 #rustup target add x86_64-pc-windows-gnu
 #rustup target add x86_64-unknown-linux-musl
-CC=/usr/local/bin/musl-gcc RUSTFLAGS='-C link-args=-s' cargo build --release --target=x86_64-unknown-linux-musl
 #PKG_CONFIG_ALLOW_CROSS=1
 #PKG_CONFIG_PATH=/usr/x86_64-w64-mingw32/sys-root/mingw/lib/pkgconfig/
 #RUSTFLAGS='-C link-args=-s' cargo build --release --target=x86_64-pc-windows-gnu
@@ -22,3 +21,13 @@ CC=/usr/local/bin/musl-gcc RUSTFLAGS='-C link-args=-s' cargo build --release --t
 #USAGE:
 #Put this in your bashrc. Everytime a command is executed, this command will run.
 #PROMPT_COMMAND="/usr/local/bin/setgitconfig; $PROMPT_COMMAND"
+cargo clean
+rm -rf build
+CC=/usr/bin/musl-gcc RUSTFLAGS='-C link-args=-s' cargo build --release --target=x86_64-unknown-linux-musl
+sha256sum target/x86_64-unknown-linux-musl/release/setgitconfig | awk '{print $1}' > setgitconfig.sha256sum
+
+mkdir -p build
+upx target/x86_64-unknown-linux-musl/release/setgitconfig
+
+mv target/x86_64-unknown-linux-musl/release/setgitconfig build/setgitconfig-linux-musl
+mv setgitconfig.sha256sum build
