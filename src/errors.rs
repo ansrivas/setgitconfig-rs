@@ -20,14 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-use custom_error::custom_error;
 use git2;
 use std::io;
 use toml::de::Error as toml_error;
 
-custom_error! {pub SetGitConfigError
-	Io{source: io::Error}         = "File Error: {source}",
-	TomlError{source: toml_error} = "Toml parsing error: {source}",
-	GitError{source: git2::Error} = "Failed during a git operation. Error is : {source}",
-	PathError = "Failed to fetch current dir path",
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum SetGitConfigError {
+	#[error("File operation error {source}")]
+	Io {
+		#[from]
+		source: io::Error,
+	},
+	#[error("Failed during a git operation. Error is : {source}")]
+	GitError {
+		#[from]
+		source: git2::Error,
+	},
+	#[error("Failed during a git operation. Error is : {source}")]
+	TomlError {
+		#[from]
+		source: toml_error,
+	},
+	#[error("Failed to fetch current dir path")]
+	PathError,
 }
