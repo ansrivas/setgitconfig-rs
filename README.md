@@ -8,7 +8,7 @@ Sets correct username and useremail for your git-url based on a configuration fi
 
 ### Use case:
 
-We work on several repositories on several repositories. Sometime our username and emails are different
+We work on several repositories from different version control providers. Sometime our username and emails are different
 and we need to set the git config for each of them otherwise the repositories do not detect it.
 
 This binary solves exactly that, based on a simple toml file.
