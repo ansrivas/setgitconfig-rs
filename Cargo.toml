@@ -1,6 +1,6 @@
 [package]
 name = "setgitconfig-rs"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Ankur Srivastava <ankur.srivastava@email.de>"]
 description = "Set proper git username and email based on the current repository you are in."
 homepage = "https://github.com/ansrivas/setgitconfig-rs"

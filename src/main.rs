@@ -27,6 +27,7 @@ mod config;
 mod errors;
 use crate::errors::SetGitConfigError;
 use tracing;
+use tracing_subscriber::EnvFilter;
 
 /// Set the correct username and email based on the giturl
 ///
@@ -65,13 +66,15 @@ fn set_gitconfig() -> Result<(), SetGitConfigError> {
 }
 
 fn main() -> Result<(), SetGitConfigError> {
-	tracing_subscriber::fmt::init();
+	tracing_subscriber::fmt()
+		.with_env_filter(EnvFilter::from_default_env())
+		.init();
 
 	tracing::debug!("starting up");
 	match set_gitconfig() {
 		Ok(_) => Ok(()),
 		Err(error) => {
-			tracing::error!("Failed to execute setgitconfig with error {}", error);
+			tracing::debug!("Failed to execute setgitconfig with error {}", error);
 			Ok(())
 		}
 	}
