@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2019 Ankur Srivastava
+// Copyright (c) 2021 Ankur Srivastava
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,16 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#[macro_use]
-extern crate log;
-
-use env_logger;
 use git2::{Config as GitConfig, Repository};
 use std::env;
 use std::path::Path;
 mod config;
 mod errors;
 use crate::errors::SetGitConfigError;
+use tracing;
 
 /// Set the correct username and email based on the giturl
 ///
@@ -44,28 +41,37 @@ fn set_gitconfig() -> Result<(), SetGitConfigError> {
 		.to_str()
 		.ok_or_else(|| errors::SetGitConfigError::PathError)?
 		.to_lowercase();
+	tracing::debug!("Opening the repo at {:?}", &absolute_path);
 	let repo = Repository::open(&Path::new(&absolute_path))?;
 	let remote = repo.find_remote("origin")?;
 	let url = remote.url().ok_or(git2::Error::from_str("failed"))?;
+	tracing::debug!("Found the remote url of the repo at {:?}", &url);
 	let mut gitconfig = GitConfig::open_default()?;
 
 	let configuration = config::read().expect("Unable to read the config file for setgitconfig");
 	for conf in configuration.repositories {
-		gitconfig.set_str("user.name", &conf.username)?;
 		if url.contains(&conf.giturl) {
+			gitconfig.set_str("user.name", &conf.username)?;
 			gitconfig.set_str("user.email", &conf.email)?;
+			tracing::debug!(
+				"Setting the email {} and username {}",
+				&conf.username,
+				&conf.email
+			);
+			return Ok(());
 		}
 	}
 	Ok(())
 }
 
 fn main() -> Result<(), SetGitConfigError> {
-	env_logger::init();
-	debug!("starting up");
+	tracing_subscriber::fmt::init();
+
+	tracing::debug!("starting up");
 	match set_gitconfig() {
 		Ok(_) => Ok(()),
 		Err(error) => {
-			debug!("{}", error);
+			tracing::error!("Failed to execute setgitconfig with error {}", error);
 			Ok(())
 		}
 	}

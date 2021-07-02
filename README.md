@@ -52,3 +52,9 @@ This binary solves exactly that, based on a simple toml file.
   email = "myuserfor-github@xmail.com"
   giturl = "gitlab.com"
   ```
+
+## Debugging:
+In case the binary is not working as expected, simply run the following:
+```rust
+RUST_LOG=debug path/to/setgitconfig
+```
