@@ -1,6 +1,6 @@
 [package]
 name = "setgitconfig-rs"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Ankur Srivastava <ankur.srivastava@email.de>"]
 description = "Set proper git username and email based on the current repository you are in."
 homepage = "https://github.com/ansrivas/setgitconfig-rs"
@@ -22,11 +22,10 @@ name = "setgitconfig"
 path = "src/main.rs"
 
 [dependencies]
-git2 = "0.13"
-openssl = { version = "0.10", features = ["vendored"] }
+git2 = { version = "0.13", features = ["vendored-libgit2", "vendored-openssl"] }
 serde = { version = "1.0", features = ["derive"] }
 dirs = "4.0"
 thiserror = "1.0"
 toml = "0.5.8"
-tracing = "0.1.26"
+tracing = "0.1"
 tracing-subscriber="0.2"
