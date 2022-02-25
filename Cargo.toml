@@ -7,14 +7,10 @@ homepage = "https://github.com/ansrivas/setgitconfig-rs"
 documentation = "https://docs.rs/setgitconfig_rs"
 repository = "https://github.com/ansrivas/setgitconfig-rs"
 readme = "README.md"
-keywords = [
-    "gitconfig",
-    "command-line",
-    "tool",
-]
+keywords = ["gitconfig", "command-line", "tool"]
 license = "MIT"
 categories = ["command-line-utilities"]
-edition="2018"
+edition = "2018"
 
 
 [[bin]]
@@ -28,4 +24,4 @@ dirs = "4.0"
 thiserror = "1.0"
 toml = "0.5.8"
 tracing = "0.1"
-tracing-subscriber="0.3"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
