@@ -22,7 +22,7 @@ name = "setgitconfig"
 path = "src/main.rs"
 
 [dependencies]
-git2 = { version = "0.13", features = ["vendored-libgit2", "vendored-openssl"] }
+git2 = { version = "0.14", features = ["vendored-libgit2", "vendored-openssl"] }
 serde = { version = "1.0", features = ["derive"] }
 dirs = "4.0"
 thiserror = "1.0"
