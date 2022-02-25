@@ -12,8 +12,6 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - 1.44.0 # MSRV
-          - 1.46.0 # MSRV
           - stable
           - nightly
 
@@ -21,44 +19,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
 
       - name: Install ${{ matrix.version }}
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: ${{ matrix.version }}-x86_64-unknown-linux-gnu
           profile: minimal
-          override: true
+          toolchain: ${{ matrix.version }}-x86_64-unknown-linux-gnu
 
-      - name: Generate Cargo.lock
-        uses: actions-rs/cargo@v1
-        with:
-          command: generate-lockfile
-
-      - name: Cache cargo registry
-        uses: actions/cache@v1
-        with:
-          path: ~/.cargo/registry
-          key: ${{ matrix.version }}-x86_64-unknown-linux-gnu-cargo-registry-trimmed-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Cache cargo index
-        uses: actions/cache@v1
-        with:
-          path: ~/.cargo/git
-          key: ${{ matrix.version }}-x86_64-unknown-linux-gnu-cargo-index-trimmed-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Cache cargo build
-        uses: actions/cache@v1
-        with:
-          path: target
-          key: ${{ matrix.version }}-x86_64-unknown-linux-gnu-cargo-build-trimmed-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Cache cargo tarpaulin
-        if: matrix.version == '1.42.0' && (github.ref == 'refs/heads/master' || github.event_name == 'pull_request')
-        uses: actions/cache@v1
-        with:
-          path: ~/.cargo/bin
-          key: ${{ matrix.version }}-x86_64-unknown-linux-gnu-tarpaulin
+      - uses: Swatinem/rust-cache@v1
 
       - name: Run tests
         uses: actions-rs/cargo@v1
@@ -68,22 +37,11 @@ jobs:
           args: --all --all-features --no-fail-fast -- --nocapture
 
       - name: Install tarpaulin
-        if: matrix.version == '1.42.0' && (github.ref == 'refs/heads/master' || github.event_name == 'pull_request')
         continue-on-error: true
         run: |
           cargo install cargo-tarpaulin
 
       - name: Generate coverage report
-        if: matrix.version == '1.42.0' && (github.ref == 'refs/heads/master' || github.event_name == 'pull_request')
         continue-on-error: true
         run: |
           cargo tarpaulin --out Xml --all --all-features
-
-      - name: Install cargo-cache
-        continue-on-error: true
-        run: |
-          cargo install cargo-cache --no-default-features --features ci-autoclean
-
-      - name: Clear the cargo caches
-        run: |
-          cargo-cache
