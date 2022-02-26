@@ -1,6 +1,6 @@
 [package]
 name = "setgitconfig-rs"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["Ankur Srivastava <ankur.srivastava@email.de>"]
 description = "Set proper git username and email based on the current repository you are in."
 homepage = "https://github.com/ansrivas/setgitconfig-rs"
@@ -10,7 +10,7 @@ readme = "README.md"
 keywords = ["gitconfig", "command-line", "tool"]
 license = "MIT"
 categories = ["command-line-utilities"]
-edition = "2018"
+edition = "2021"
 
 
 [[bin]]
