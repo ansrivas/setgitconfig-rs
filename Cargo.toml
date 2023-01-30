@@ -22,6 +22,6 @@ git2 = { version = "0.16", features = ["vendored-libgit2", "vendored-openssl"] }
 serde = { version = "1.0", features = ["derive"] }
 dirs = "4.0"
 thiserror = "1.0"
-toml = "0.6.0"
+toml = "0.7.0"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
