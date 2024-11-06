@@ -21,7 +21,7 @@ path = "src/main.rs"
 git2 = { version = "0.19", features = ["vendored-libgit2", "vendored-openssl"] }
 serde = { version = "1.0", features = ["derive"] }
 dirs = "5.0"
-thiserror = "1.0"
+thiserror = "2.0"
 toml = "0.8.0"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
