@@ -27,7 +27,7 @@ CC=/usr/bin/musl-gcc RUSTFLAGS='-C link-args=-s' cargo build --release --target=
 sha256sum target/x86_64-unknown-linux-musl/release/setgitconfig | awk '{print $1}' > setgitconfig.sha256sum
 
 mkdir -p build
-upx target/x86_64-unknown-linux-musl/release/setgitconfig
+upx --lzma --best target/x86_64-unknown-linux-musl/release/setgitconfig
 
 mv target/x86_64-unknown-linux-musl/release/setgitconfig build/setgitconfig-linux-musl
 mv setgitconfig.sha256sum build
